@@ -22,32 +22,18 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await toast.promise(
-                axios.post('/api/auth/login', user),
-                {
-                    loading: 'Loging in...',
-                    success: (res: any) => {
-                        // console.log('handleLogin toastRes ---> ', res.data);
-                        if (res.data.success) {
-                            setUser({ email: '', password: '' });
-                            return res.data.message;
-                        } else {
-                            throw new Error(res.data.message);
-                        }
-                    },
-                    error: (err) => {
-                        console.error('Error in login toast ---> ', err);
-                        return err.message;
-                    },
-                }
-            );
-            if (response.data.success) {
-                router.push('/profile');
+            const toastId: string = "loginToast";
+            toast.loading('Logging you in...', { id: toastId });
+            const response = await axios.post('/api/auth/login', user);
+            // console.log(response);
+            if (!response.data.success) {
+                return toast.error(response.data.message || "Fail to Login", { id: toastId });
             }
-            return response.data;
+            toast.success(response.data.message || "Login Successful", { id: toastId });
+            setUser({ email: '', password: '' });
+            router.push('/profile');
         } catch (error) {
             console.log('Error in handleLogin ----> ', error);
-            return false;
         } finally {
             setLoading(false);
         }

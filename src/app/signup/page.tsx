@@ -26,34 +26,19 @@ const SignupPage = () => {
         e.preventDefault();
         try {
             setLoading(true);
+            const toastId: string = "signupToast";
+            toast.loading('Signing you up...', { id: toastId });
             // const response = await axios.post('/api/auth/signup', user);
             // console.log('handleSignup ---> ', response.data);
-            const response = await toast.promise(
-                axios.post('/api/auth/signup', user),
-                {
-                    loading: 'Signing up...',
-                    success: (res: any) => {
-                        // console.log('handleSignup toastRes ---> ', res.data);
-                        if (res.data.success) {
-                            setUser({ username: '', email: '', password: '', confirmPass: '' });
-                            return res.data.message;
-                        } else {
-                            throw new Error(res.data.message);
-                        }
-                    },
-                    error: (err) => {
-                        console.error('Error in signup toast ---> ', err);
-                        return err.message;
-                    },
-                }
-            );
-            if (response.data.success) {
-                router.push('/login');
+            const response = await axios.post('/api/auth/signup', user);
+            if (!response.data.success) {
+                return toast.error(response.data.message || "Fail to Signup", { id: toastId });
             }
-            return response.data;
+            toast.success(response.data.message || "User created successfully", { id: toastId });
+            setUser({ username: '', email: '', password: '', confirmPass: '' });
+            router.push('/login');
         } catch (error) {
             console.log('Error in handleSignup ----> ', error);
-            return false;
         } finally {
             setLoading(false);
         }

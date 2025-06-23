@@ -13,31 +13,16 @@ const ProfilePage = () => {
     const handleLogout = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await toast.promise(
-                axios.get('/api/auth/logout'),
-                {
-                    loading: 'Signing out...',
-                    success: (res: any) => {
-                        // console.log('handleLogout toastRes ---> ', res.data);
-                        if (res.data.success) {
-                            return res.data.message;
-                        } else {
-                            throw new Error(res.data.message);
-                        }
-                    },
-                    error: (err) => {
-                        console.error('Error in logout toast ---> ', err);
-                        return err.message;
-                    },
-                }
-            );
-            if (response.data.success) {
-                router.push('/login');
+            const toastId = "logoutToast"
+            toast.loading("Loging out...", { id: toastId });
+            const response = await axios.get('/api/auth/logout');
+            if (!response.data.success) {
+                return toast.error(response.data.message || "Fail to Logout", { id: toastId });
             }
-            return response.data;
+            toast.success(response.data.message || "Logout Successful", { id: toastId });
+            router.push('/login');
         } catch (error) {
             console.log('Error in handleLogout ----> ', error);
-            return false;
         }
     }
 
@@ -114,7 +99,7 @@ const ProfilePage = () => {
                                     <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5" role="menu" aria-orientation="vertical" tabIndex={-1}>
                                         <Link href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Your Profile</Link>
                                         <Link href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Settings</Link>
-                                        <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 w-full text-start">Sign out</button>
+                                        <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 w-full text-start cursor-pointer">Sign out</button>
                                     </div>
                                 )}
                             </div>
