@@ -1,8 +1,15 @@
 "use client"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { Label } from '@radix-ui/react-label';
 import axios from 'axios';
+import { Loader2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 type User = {
@@ -31,7 +38,7 @@ const LoginPage = () => {
             }
             toast.success(response.data.message || "Login Successful", { id: toastId });
             setUser({ email: '', password: '' });
-            router.push('/profile');
+            router.push('/dashboard');
         } catch (error) {
             console.log('Error in handleLogin ----> ', error);
         } finally {
@@ -41,20 +48,67 @@ const LoginPage = () => {
 
     return (
         <section className='login flex flex-col items-center justify-center min-h-screen'>
-            <div className='w-[25%] border p-5 rounded-lg text-sm bg-[#1c2029]'>
-                <h1 className='text-2xl'>Login User</h1>
-                <form onSubmit={handleLogin} method='POST' className="login-form mt-5">
-                    <label htmlFor="Email" className='block mt-4 mb-2'>Email :</label>
-                    <input className='border rounded-sm bg-white text-black outline-0 p-2 w-full' type="email" placeholder='Enter your email' value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
-
-                    <label htmlFor="Password" className='block mt-4 mb-2'>Password :</label>
-                    <input className='border rounded-sm bg-white text-black outline-0 p-2 w-full' type="password" placeholder='Enter your password' value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
-
-                    <p className='mt-4'>I don't have an account <Link href={'/signup'} className='text-blue-500'>Signup</Link></p>
-
-                    <button className='border-sky-500 rounded-sm bg-sky-500 outline-0 p-2 w-full mt-4'>{loading ? "Loging in..." : "Login"}</button>
-                </form>
-            </div>
+            <Card className="w-full max-w-lg">
+                <CardHeader>
+                    <CardTitle className='text-4xl'>Login to your account</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <span>Don't have an account? <Link href={"/signup"} className='underline'>Create an account here</Link></span>
+                    <form onSubmit={handleLogin}>
+                        <div className="grid gap-2 my-4">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                type="email"
+                                required
+                                value={user.email}
+                                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-2 my-4">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                type="password"
+                                required
+                                value={user.password}
+                                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex items-center justify-between my-4">
+                            <div className="flex items-center gap-3">
+                                <Checkbox id="remember" />
+                                <Label htmlFor="remember">Remember me</Label>
+                            </div>
+                            <Link
+                                href="/login"
+                                className="text-sm underline-offset-4 hover:underline"
+                            >
+                                Forgot your password?
+                            </Link>
+                        </div>
+                        {!loading ? (
+                            <Button type="submit" className="w-full">
+                                Login
+                            </Button>
+                        ) : (
+                            <Button className="w-full" disabled>
+                                <Loader2Icon className="animate-spin" />
+                                Please wait
+                            </Button>
+                        )}
+                    </form>
+                </CardContent>
+                <div className="relative my-2 px-6">
+                    <Separator />
+                    <span className="absolute left-[50%] -top-3 -translate-x-[50%] text-md font-medium text-foreground bg-white px-4">
+                        or
+                    </span>
+                </div>
+                <CardFooter className="flex-col gap-2">
+                    <Button variant="outline" className="w-full">
+                        Login with Google
+                    </Button>
+                </CardFooter>
+            </Card>
         </section>
     )
 }

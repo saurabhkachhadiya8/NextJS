@@ -20,8 +20,10 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/models/userModel.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/models/userModel.js", "src/app/(dashboard)/partner-team/partner"],
   "exclude": ["node_modules"]
 }
