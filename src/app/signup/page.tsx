@@ -1,5 +1,12 @@
 "use client"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import axios from 'axios';
+import { Loader2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -46,26 +53,77 @@ const SignupPage = () => {
 
     return (
         <section className='signup flex flex-col items-center justify-center min-h-screen'>
-            <div className='lg:w-[25%] md:w-[50%] w-[95%] border p-5 rounded-lg text-sm bg-[#1c2029]'>
-                <h1 className='text-2xl'>Signup User</h1>
-                <form onSubmit={handleSignup} method='POST' className="signup-form mt-5">
-                    <label htmlFor="username" className='block mt-4 mb-2'>UserName :</label>
-                    <input className='border rounded-sm bg-white text-black outline-0 p-2 w-full' type="text" placeholder='Enter your name' value={user.username} onChange={(e) => setUser({ ...user, username: e.target.value })} />
-
-                    <label htmlFor="Email" className='block mt-4 mb-2'>Email :</label>
-                    <input className='border rounded-sm bg-white text-black outline-0 p-2 w-full' type="email" placeholder='Enter your email' value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
-
-                    <label htmlFor="Password" className='block mt-4 mb-2'>Password :</label>
-                    <input className='border rounded-sm bg-white text-black outline-0 p-2 w-full' type="password" placeholder='Enter your password' value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
-
-                    <label htmlFor="ConfirmPassword" className='block mt-4 mb-2'>Confirm Password :</label>
-                    <input className='border rounded-sm bg-white text-black outline-0 p-2 w-full' type="password" placeholder='Confirm your password' value={user.confirmPass} onChange={(e) => setUser({ ...user, confirmPass: e.target.value })} />
-
-                    <p className='mt-4'>I already have an account <Link href={'/login'} className='text-blue-500'>Login</Link></p>
-
-                    <button className='border-sky-500 rounded-sm bg-sky-500 outline-0 p-2 w-full mt-4 cursor-pointer'>{loading ? "Siging up..." : "Signup"}</button>
-                </form>
-            </div>
+            <Card className="w-full max-w-lg">
+                <CardHeader>
+                    <CardTitle className='text-4xl'>Create your account</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <span>Already have an account? <Link href={"/login"} className='underline'>Login here</Link></span>
+                    <form onSubmit={handleSignup}>
+                        <div className="grid gap-2 my-4">
+                            <Label htmlFor="uaername">UaerName</Label>
+                            <Input
+                                type="text"
+                                required
+                                value={user.username}
+                                onChange={(e) => setUser({ ...user, username: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-2 my-4">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                type="email"
+                                required
+                                value={user.email}
+                                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-2 my-4">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                type="password"
+                                required
+                                value={user.password}
+                                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-2 my-4">
+                            <Label htmlFor="ConfirmPassword">Confirm Password</Label>
+                            <Input
+                                type="password"
+                                required
+                                value={user.confirmPass}
+                                onChange={(e) => setUser({ ...user, confirmPass: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex items-center gap-3 my-4">
+                            <Checkbox id="remember" />
+                            <Label htmlFor="remember">I agree to <Link href={"#"} className='underline-offset-4 hover:underline'>terms and conditions</Link></Label>
+                        </div>
+                        {!loading ? (
+                            <Button type="submit" className="w-full">
+                                Signup
+                            </Button>
+                        ) : (
+                            <Button className="w-full" disabled>
+                                <Loader2Icon className="animate-spin" />
+                                Please wait
+                            </Button>
+                        )}
+                    </form>
+                </CardContent>
+                <div className="relative my-2 px-6">
+                    <Separator />
+                    <span className="absolute left-[50%] -top-3 -translate-x-[50%] text-md font-medium text-foreground bg-white px-4">
+                        or
+                    </span>
+                </div>
+                <CardFooter className="flex-col gap-2">
+                    <Button variant="outline" className="w-full">
+                        Signup with Google
+                    </Button>
+                </CardFooter>
+            </Card>
         </section>
     )
 }
