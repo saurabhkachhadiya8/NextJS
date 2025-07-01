@@ -53,7 +53,7 @@ const LoginPage = () => {
                     <CardTitle className='text-4xl'>Login to your account</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <span>Don't have an account? <Link href={"/signup"} className='underline'>Create an account here</Link></span>
+                    <span>Don&apos;t have an account? <Link href={"/signup"} className='underline'>Create an account here</Link></span>
                     <form onSubmit={handleLogin}>
                         <div className="grid gap-2 my-4">
                             <Label htmlFor="email">Email</Label>

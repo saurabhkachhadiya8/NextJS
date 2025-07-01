@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     });
     response.cookies.set("token", token, { httpOnly: true });
     return response;
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json({
       status: 500,
       success: false,
